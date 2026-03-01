@@ -6,12 +6,10 @@ Powered by Ollama (runs locally, completely free).
 
 import re
 import random
-import asyncio
 import httpx
-import json
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "llama3.2"  # change to any model you pulled
+OLLAMA_MODEL = "llama3.2"
 
 
 # ─── SYSTEM PROMPTS ───────────────────────────────────────────────────────────
@@ -92,9 +90,9 @@ class AuraSwarm:
         self.task_id = task_id
 
     async def _call_ollama(self, system: str, user: str) -> str:
-        """Call local Ollama API — no API key needed."""
+        """Call local Ollama API — no API key needed. 5 min timeout for CPU."""
         prompt = f"SYSTEM: {system}\n\nUSER: {user}\n\nASSISTANT:"
-        async with httpx.AsyncClient(timeout=120.0) as client:
+        async with httpx.AsyncClient(timeout=300.0) as client:
             response = await client.post(
                 OLLAMA_URL,
                 json={
